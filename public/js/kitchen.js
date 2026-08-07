@@ -37,11 +37,10 @@
 
         card.innerHTML = `
           <div class="order-card-header">
-            <span class="table">Tisch ${escapeHtml(order.table)}</span>
+            <span class="table">${escapeHtml(order.name)}</span>
             <span class="time">#${order.id} · ${formatTime(order.createdAt)}</span>
           </div>
           <ul>${itemsHtml}</ul>
-          ${order.note ? `<div class="note">Hinweis: ${escapeHtml(order.note)}</div>` : ''}
           <div class="order-card-actions"></div>
         `;
 

@@ -41,10 +41,10 @@ app.get('/api/orders', (req, res) => {
 });
 
 app.post('/api/orders', (req, res) => {
-  const { table, items, note } = req.body || {};
+  const { name, items } = req.body || {};
 
-  if (!table || typeof table !== 'string' || !table.trim()) {
-    return res.status(400).json({ error: 'Tischnummer fehlt.' });
+  if (!name || typeof name !== 'string' || !name.trim()) {
+    return res.status(400).json({ error: 'Name fehlt.' });
   }
   if (!Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'Die Bestellung enthält keine Artikel.' });
@@ -67,9 +67,8 @@ app.post('/api/orders', (req, res) => {
 
   const order = {
     id: nanoid(8),
-    table: table.trim().slice(0, 20),
+    name: name.trim().slice(0, 40),
     items: orderItems,
-    note: typeof note === 'string' ? note.trim().slice(0, 300) : '',
     status: 'neu',
     createdAt: Date.now(),
     updatedAt: Date.now(),
@@ -78,7 +77,6 @@ app.post('/api/orders', (req, res) => {
   orders.push(order);
   saveOrders(orders);
   io.to('kitchen').emit('order:new', order);
-  io.to(`table:${order.table}`).emit('order:update', order);
 
   res.status(201).json(order);
 });
@@ -96,7 +94,7 @@ app.patch('/api/orders/:id/status', (req, res) => {
   order.updatedAt = Date.now();
   saveOrders(orders);
   io.to('kitchen').emit('order:update', order);
-  io.to(`table:${order.table}`).emit('order:update', order);
+  io.to(`order:${order.id}`).emit('order:update', order);
   res.json(order);
 });
 
@@ -108,9 +106,9 @@ io.on('connection', (socket) => {
   socket.on('join:kitchen', () => {
     socket.join('kitchen');
   });
-  socket.on('join:table', (table) => {
-    if (typeof table === 'string' && table.trim()) {
-      socket.join(`table:${table.trim().slice(0, 20)}`);
+  socket.on('join:order', (orderId) => {
+    if (typeof orderId === 'string' && orderId.trim()) {
+      socket.join(`order:${orderId.trim()}`);
     }
   });
 });
