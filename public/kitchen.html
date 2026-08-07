@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Küchen-Ansicht</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="kitchen-body">
+<header class="topbar">
+  <h1>Küche</h1>
+  <div class="conn-status" id="connStatus">verbinde…</div>
+</header>
+
+<main class="board">
+  <section class="column" data-status="neu">
+    <h2>Neu <span class="count" id="count-neu">0</span></h2>
+    <div class="cards" id="cards-neu"></div>
+  </section>
+  <section class="column" data-status="in_zubereitung">
+    <h2>In Zubereitung <span class="count" id="count-in_zubereitung">0</span></h2>
+    <div class="cards" id="cards-in_zubereitung"></div>
+  </section>
+  <section class="column" data-status="fertig">
+    <h2>Fertig <span class="count" id="count-fertig">0</span></h2>
+    <div class="cards" id="cards-fertig"></div>
+  </section>
+</main>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/kitchen.js"></script>
+</body>
+</html>

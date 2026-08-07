@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Speisekarte &amp; Bestellung</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<header class="topbar">
+  <h1>Speisekarte</h1>
+  <div class="table-badge" id="tableBadge">Tisch —</div>
+</header>
+
+<main id="menu" class="menu"></main>
+
+<button id="cartButton" class="cart-fab" hidden>
+  <span id="cartCount">0</span> Artikel · <span id="cartTotal">0,00 €</span>
+</button>
+
+<div id="cartSheet" class="sheet" hidden>
+  <div class="sheet-header">
+    <h2>Deine Bestellung</h2>
+    <button id="closeCart" class="icon-btn" aria-label="Schließen">✕</button>
+  </div>
+  <div id="cartItems" class="cart-items"></div>
+  <label class="field">
+    Anmerkung (optional)
+    <textarea id="orderNote" rows="2" placeholder="z.B. ohne Zwiebeln"></textarea>
+  </label>
+  <div class="sheet-footer">
+    <div class="total-row">
+      <span>Gesamt</span>
+      <strong id="sheetTotal">0,00 €</strong>
+    </div>
+    <button id="submitOrder" class="primary-btn">Bestellung senden</button>
+  </div>
+</div>
+
+<div id="confirmation" class="confirmation" hidden>
+  <div class="confirmation-box">
+    <h2>Bestellung aufgegeben ✅</h2>
+    <p>Bestellnummer: <strong id="confirmOrderId"></strong></p>
+    <p>Status: <span id="confirmStatus">Neu</span></p>
+    <button id="newOrder" class="primary-btn">Neue Bestellung</button>
+  </div>
+</div>
+
+<div id="overlay" class="overlay" hidden></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/order.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+[
+  {
+    "category": "Vorspeisen",
+    "items": [
+      { "id": "v1", "name": "Tomatensuppe", "description": "mit Basilikum und Croutons", "price": 5.50 },
+      { "id": "v2", "name": "Bruschetta", "description": "geröstetes Brot mit Tomaten und Knoblauch", "price": 6.00 },
+      { "id": "v3", "name": "Caesar Salad", "description": "Römersalat, Parmesan, Croutons, Dressing", "price": 8.50 }
+    ]
+  },
+  {
+    "category": "Hauptgerichte",
+    "items": [
+      { "id": "h1", "name": "Margherita Pizza", "description": "Tomate, Mozzarella, Basilikum", "price": 9.50 },
+      { "id": "h2", "name": "Spaghetti Carbonara", "description": "Ei, Speck, Parmesan, Pfeffer", "price": 11.00 },
+      { "id": "h3", "name": "Wiener Schnitzel", "description": "mit Pommes und Preiselbeeren", "price": 14.50 },
+      { "id": "h4", "name": "Gemüse-Curry", "description": "mit Kokosmilch, Reis", "price": 10.50 }
+    ]
+  },
+  {
+    "category": "Getränke",
+    "items": [
+      { "id": "g1", "name": "Mineralwasser 0,5l", "description": "still oder mit Kohlensäure", "price": 3.00 },
+      { "id": "g2", "name": "Cola 0,3l", "description": "", "price": 3.50 },
+      { "id": "g3", "name": "Apfelschorle 0,3l", "description": "", "price": 3.20 },
+      { "id": "g4", "name": "Hausbier 0,3l", "description": "vom Fass", "price": 4.00 }
+    ]
+  },
+  {
+    "category": "Nachspeisen",
+    "items": [
+      { "id": "n1", "name": "Tiramisu", "description": "hausgemacht", "price": 5.50 },
+      { "id": "n2", "name": "Schokokuchen", "description": "mit flüssigem Kern, Vanilleeis", "price": 6.00 }
+    ]
+  }
+]
