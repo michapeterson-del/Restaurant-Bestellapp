@@ -29,7 +29,29 @@ Der Port kann über die Umgebungsvariable `PORT` angepasst werden.
 
 Gerichte, Preise und Kategorien liegen in `data/menu.json` und können direkt bearbeitet werden.
 
+## Online stellen (kostenlos über Render.com)
+
+Damit Gäste und Küche die App über das Internet erreichen (nicht nur `localhost`), am
+einfachsten über [Render](https://render.com) hosten:
+
+1. Auf [render.com](https://render.com) mit dem GitHub-Account einloggen/registrieren.
+2. **New +** → **Web Service** klicken und dieses Repository auswählen
+   (`michapeterson-del/Restaurant-Bestellapp`), Branch `claude/mobile-order-app-kitchen-4qjqoh`
+   (oder `main`, sobald gemergt).
+3. Render erkennt die `render.yaml` automatisch:
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+   - Plan: Free
+4. **Create Web Service** klicken und ein paar Minuten warten, bis der Status "Live" ist.
+5. Render zeigt eine feste Adresse an, z.B. `https://restaurant-bestellapp.onrender.com`.
+   - Speisekarte für Gäste: diese Adresse direkt
+   - Küchen-Ansicht: dieselbe Adresse + `/kitchen`
+
+Hinweis zum kostenlosen Plan: Die App "schläft" nach ca. 15 Minuten ohne Aufrufe ein und
+braucht beim nächsten Aufruf ca. 30–50 Sekunden zum Aufwachen. Für den echten Betrieb (keine
+Wartezeit, eigene Domain) lohnt sich später ein bezahlter Plan (ca. 7 $/Monat).
+
 ## Nächste Schritte für den echten Betrieb
 
-- Hosting (z.B. auf einem kleinen Server/VPS) und eigene Domain/HTTPS
+- Eigene Domain statt der `onrender.com`-Adresse
 - Optional: Login/PIN für die Küchen-Ansicht, Bezahlfunktion, Bestellhistorie/Statistiken
