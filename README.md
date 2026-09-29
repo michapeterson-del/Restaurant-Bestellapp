@@ -17,8 +17,11 @@ werden in `data/orders.json` gespeichert (übersteht einen Neustart).
 
 ```bash
 npm install
-npm start
+KITCHEN_PASSWORD=dein-kuechen-passwort npm start
 ```
+
+`KITCHEN_PASSWORD` ist Pflicht (mind. 8 Zeichen): Die Küchen-Ansicht und die Bestell-API
+fragen danach (Benutzername beliebig). Bei Render unter **Environment** eintragen.
 
 - Speisekarte: http://localhost:3000/
 - Küche: http://localhost:3000/kitchen
@@ -54,4 +57,4 @@ Wartezeit, eigene Domain) lohnt sich später ein bezahlter Plan (ca. 7 $/Monat).
 ## Nächste Schritte für den echten Betrieb
 
 - Eigene Domain statt der `onrender.com`-Adresse
-- Optional: Login/PIN für die Küchen-Ansicht, Bezahlfunktion, Bestellhistorie/Statistiken
+- Optional: Bezahlfunktion, Bestellhistorie/Statistiken

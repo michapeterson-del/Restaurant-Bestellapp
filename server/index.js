@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const path = require('path');
+const crypto = require('crypto');
 const { Server } = require('socket.io');
 const { nanoid } = require('nanoid');
 const { loadOrders, saveOrders } = require('./store');
@@ -8,13 +9,39 @@ const { loadOrders, saveOrders } = require('./store');
 const MENU = require('../data/menu.json');
 
 const PORT = process.env.PORT || 3000;
+// Pflicht: Passwort für die Küchen-Ansicht (Benutzername beliebig). Ohne
+// Passwort startet der Server nicht, sonst wären alle Bestellungen öffentlich.
+const KITCHEN_PASSWORD = process.env.KITCHEN_PASSWORD || '';
+if (KITCHEN_PASSWORD.length < 8) {
+  console.error('KITCHEN_PASSWORD (mind. 8 Zeichen) als Umgebungsvariable setzen.');
+  process.exit(1);
+}
 const STATUSES = ['neu', 'in_zubereitung', 'fertig', 'abgeholt'];
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+// Küchen-Login per HTTP Basic Auth: der Browser fragt einmal nach dem Passwort
+// und schickt es danach bei allen Anfragen (auch Socket.io) automatisch mit.
+function hasKitchenAuth(header) {
+  const match = /^Basic (.+)$/.exec(header || '');
+  if (!match) return false;
+  const decoded = Buffer.from(match[1], 'base64').toString('utf8');
+  const password = decoded.slice(decoded.indexOf(':') + 1);
+  const given = crypto.createHash('sha256').update(password).digest();
+  const expected = crypto.createHash('sha256').update(KITCHEN_PASSWORD).digest();
+  return crypto.timingSafeEqual(given, expected);
+}
+
+function requireKitchen(req, res, next) {
+  if (hasKitchenAuth(req.headers.authorization)) return next();
+  res.set('WWW-Authenticate', 'Basic realm="Kueche", charset="UTF-8"');
+  res.status(401).send('Anmeldung erforderlich.');
+}
+
 app.use(express.json());
+app.get('/kitchen.html', requireKitchen);
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 let orders = loadOrders();
@@ -31,7 +58,7 @@ app.get('/api/menu', (req, res) => {
   res.json(MENU);
 });
 
-app.get('/api/orders', (req, res) => {
+app.get('/api/orders', requireKitchen, (req, res) => {
   const { status } = req.query;
   let result = orders;
   if (status) {
@@ -81,7 +108,7 @@ app.post('/api/orders', (req, res) => {
   res.status(201).json(order);
 });
 
-app.patch('/api/orders/:id/status', (req, res) => {
+app.patch('/api/orders/:id/status', requireKitchen, (req, res) => {
   const { status } = req.body || {};
   if (!STATUSES.includes(status)) {
     return res.status(400).json({ error: 'Ungültiger Status.' });
@@ -98,12 +125,13 @@ app.patch('/api/orders/:id/status', (req, res) => {
   res.json(order);
 });
 
-app.get('/kitchen', (req, res) => {
+app.get('/kitchen', requireKitchen, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'kitchen.html'));
 });
 
 io.on('connection', (socket) => {
   socket.on('join:kitchen', () => {
+    if (!hasKitchenAuth(socket.request.headers.authorization)) return;
     socket.join('kitchen');
   });
   socket.on('join:order', (orderId) => {
